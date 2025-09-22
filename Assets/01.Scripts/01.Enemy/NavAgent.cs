@@ -6,6 +6,8 @@ using UnityEngine;
 public class NavAgent : MonoBehaviour
 {
     private HashSet<Vector3Int> _visit; //방문 했는지 확인만
+    private Dictionary<Vector3Int, AstarNode> _nodeDict;
+
     private List<Vector3Int> routePath; //경로가 저장
     private int moveIdx = 0;
 
@@ -42,6 +44,7 @@ public class NavAgent : MonoBehaviour
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        _nodeDict = new Dictionary<Vector3Int, AstarNode>();
         _visit = new HashSet<Vector3Int>();
         routePath = new List<Vector3Int>();
     }
@@ -74,11 +77,11 @@ public class NavAgent : MonoBehaviour
     public List<Vector3Int> GetPath(Vector3Int start, Vector3Int end, int maxPathDistance = 100)
     {
         PriorityQueue<AstarNode> priorityQueue = new PriorityQueue<AstarNode>();
-        priorityQueue.Clear();
         List<Vector3Int> path = new List<Vector3Int>();
 
         Vector3Int currentPosition = start;
-        AstarNode currentNode = new AstarNode(start, end, currentPosition, null);
+        AstarNode currentNode = new AstarNode(start, end, currentPosition, currentPosition);
+        _nodeDict.TryAdd(currentPosition, currentNode);
 
         priorityQueue.Enqueue(currentNode);
 
@@ -98,22 +101,25 @@ public class NavAgent : MonoBehaviour
                 if (_visit.Contains(newPosition)) continue;
 
                 _visit.Add(newPosition);
-                priorityQueue.Enqueue(new AstarNode(start, end, newPosition, currentNode));
+                AstarNode newNode = new AstarNode(start, end, newPosition, currentPosition);
+                priorityQueue.Enqueue(newNode);
+                _nodeDict.TryAdd(newPosition, newNode);
             }
         }
 
-        if (currentNode == null || new Vector3Int(currentNode.x, currentNode.y) != end)
+        if (new Vector3Int(currentNode.x, currentNode.y) != end)
         {
             Debug.LogWarning("Path not found");
             return path;
         }
 
         Stack<AstarNode> nodeStack = new Stack<AstarNode>();
-        while (currentNode.prevNode != null)
+        while (currentNode.prevPosition == currentNode.currentPosition)
         {
             nodeStack.Push(currentNode);
-            currentNode = currentNode.prevNode;
+            currentNode = _nodeDict[currentNode.prevPosition];
         }
+        nodeStack.Push(currentNode);
 
         while (nodeStack.Count > 0)
         {

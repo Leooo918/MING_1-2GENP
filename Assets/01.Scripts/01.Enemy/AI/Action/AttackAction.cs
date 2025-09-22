@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackAction : AIAction
 {
-    public override void TakeAcion()
+    public override void TakeAction()
     {
         enemyBrain.GetComponent<AIAttack>().Attack(enemyBrain.playerTrm.position);
     }

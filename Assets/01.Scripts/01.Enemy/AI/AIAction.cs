@@ -11,5 +11,5 @@ public abstract class AIAction : MonoBehaviour
         enemyBrain = parentTrm.GetComponent<EnemyBrain>();
     }
 
-    public abstract void TakeAcion();
+    public abstract void TakeAction();
 }

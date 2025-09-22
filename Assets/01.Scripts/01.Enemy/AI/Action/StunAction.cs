@@ -12,7 +12,7 @@ public class StunAction : AIAction
         status = GetComponentInParent<EnemyStatus>();
     }
 
-    public override void TakeAcion()
+    public override void TakeAction()
     {
         Debug.Log("나는 기절");
     }

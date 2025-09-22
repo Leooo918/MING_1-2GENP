@@ -23,7 +23,7 @@ public class AIState : MonoBehaviour
     {
         foreach (var action in _actionList)
         {
-            action.TakeAcion();
+            action.TakeAction();
         }
         foreach (var transition in _transitionList)
         {

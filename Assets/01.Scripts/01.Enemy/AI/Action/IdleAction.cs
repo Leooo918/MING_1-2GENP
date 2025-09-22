@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IdleAction : AIAction
 {
-    public override void TakeAcion()
+    public override void TakeAction()
     {
 
     }

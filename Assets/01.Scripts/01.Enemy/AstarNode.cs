@@ -1,21 +1,23 @@
 using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class AstarNode : IComparable<AstarNode>
+public struct AstarNode : IComparable<AstarNode>
 {
     public int x, y;
-    public AstarNode prevNode;
-    public int distanceFromStart = 0;
-    public int remainDistance = 0;
+    public int distanceFromStart;
+    public int remainDistance;
+
+    public Vector3Int prevPosition;
+    public Vector3Int currentPosition;
 
     public int TotalDistance => distanceFromStart + remainDistance;
 
-    public AstarNode(Vector3Int start, Vector3Int end, Vector3Int position, AstarNode prevNode)
+    public AstarNode(Vector3Int start, Vector3Int end, Vector3Int position, Vector3Int prevNode)
     {
         x = position.x;
         y = position.y;
-        this.prevNode = prevNode;
+        currentPosition = new Vector3Int(x, y);
+        this.prevPosition = prevNode;
 
         distanceFromStart = Mathf.Abs(start.x - x);
         distanceFromStart += Mathf.Abs(start.y - y);
